@@ -33,9 +33,11 @@ def load_palette(path: str, bpp: int):
 
 class DataWriter:
 
-    output   = None
+    output = None
+
     datatype = None
     datasize = None
+    typedef  = None
 
     threshold   = None
     write_count = 0
@@ -43,14 +45,15 @@ class DataWriter:
     def __init__(self, output_file, datatype: str):
         self.output = output_file
 
-        datatype_sizes = {
-            'u8':  1,
-            'u16': 2
+        DATATYPES = {
+            'u8':  { 'size': 1, 'typedef': 'unsigned char'  },
+            'u16': { 'size': 2, 'typedef': 'unsigned short' }
         }
 
         self.datatype = datatype
-        if datatype in datatype_sizes:
-            self.datasize = datatype_sizes[datatype]
+        if datatype in DATATYPES:
+            self.datasize = DATATYPES[datatype]['size']
+            self.typedef  = DATATYPES[datatype]['typedef']
         else:
             raise ValueError('unknown data type: ' + datatype)
 
@@ -59,6 +62,8 @@ class DataWriter:
 
     def begin(self, name: str, static: bool, size: int):
         f = self.output
+
+        f.write('typedef ' + self.typedef + ' ' + self.datatype + ';\n')
 
         if static:
             f.write('static ')
