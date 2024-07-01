@@ -28,6 +28,12 @@ try:
 except ImportError:
     toml_support = False
 
+class Color:
+    RED   = '\033[31m\033[01m'
+    GREEN = '\033[32m\033[01m'
+
+    RESET = '\033[0m'
+
 # Setup argparse
 parser = argparse.ArgumentParser(
     description='Convert all resources listed in JSON or TOML files'
@@ -124,17 +130,20 @@ def parse_json(f):
     try:
         return json.load(f)
     except json.JSONDecodeError as e:
-        print('Error: invalid JSON:', e)
+        print(Color.RED + 'Error: invalid JSON:', str(e) + Color.RESET)
 
 def parse_toml(f):
     if not toml_support:
-        print('Error: TOML is not supported by this version of Python')
+        print(
+            Color.RED + 'Error: TOML is not supported by this ' +
+            'version of Python' + Color.RESET
+        )
         return
 
     try:
         return tomllib.load(f)
     except tomllib.TOMLDecodeError as e:
-        print('Error: invalid TOML:', e)
+        print(Color.RED + 'Error: invalid TOML:', str(e) + Color.RESET)
 
 def parse_file(f):
     parsers = {
@@ -148,13 +157,17 @@ def parse_file(f):
     try:
         content = parsers[ext](f)
     except KeyError:
-        print('Error: unknown extension:', ext)
+        print(
+            Color.RED + 'Error: unknown extension:', ext + Color.RESET
+        )
 
     return content
 
 # Read resource list files
 for f in args.res_list_files:
-    print('Reading file:', f.name)
+    print(
+        Color.GREEN + '=== Reading file:', f.name + ' ===' + Color.RESET
+    )
 
     content = parse_file(f)
     if content is None:
