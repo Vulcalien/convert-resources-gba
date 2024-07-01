@@ -1,0 +1,183 @@
+= convert-resources(1)
+:doctype: manpage
+:manmanual: Manual for convert-resources
+:mansource: convert-resources
+:revdate: 2024-07-01
+:docdate: {revdate}
+
+== NAME
+convert-resources - convert resources to embed in GBA ROMs
+
+== SYNOPSIS
+*convert-resources* [*-h*] _FILE_...
+
+== DESCRIPTION
+Convert resources listed in the specified files into GBA-friendly
+formats to embed them in ROMs.
+
+The list files can be in JSON or TOML format, and must be identified by,
+respectively, the '.json' and '.toml' extensions.
+
+Each resource is converted into a file containing a C array of type *u8*
+(unsigned 8-bit) or *u16* (unsigned 16-bit). The data is encoded in a
+way that makes it simple to use on the GBA: uncompressed and formatted
+according to the resource's type and properties. The output file can be
+compiled directly or included into other code.
+
+=== Resource types
+The supported resource types are: *'tilesets'*, *'palettes'*, *'images'*
+and *'files'*.
+
+*'tilesets'* are images composed of tiles of a given size. Each big tile
+is made up of 8x8 tiles. The output is written in such a way that 8x8
+tiles within the same big tile are stored consecutively. Tilesets may
+have a BPP (bits-per-pixel) of either 4 or 8. A palette is required to
+map each color into an index.
+
+*'palettes'* are images converted into a one-dimensional, uncompressed
+u16 array of colors. There is no restriction on how many colors a
+palette can contain.
+
+*'images'* are converted into a one-dimensional, uncompressed array of
+pixels. An image's BPP (bits-per-pixel) can be either 8 or 16, resulting
+in the output array having type u8 or u16. If the BPP is 8, a palette is
+required to map each color into an index.
+
+*'files'* are translated directly without applying any conversion. The
+generated output is a u8 array containing the exact same bytes as the
+input file.
+
+== FILE FORMAT
+=== General rules
+A file may contain global properties and lists of resources.
+
+A list of resources is named after the type of resources it contains
+(e.g., 'tilesets', 'images'). Each resource is listed as an object with
+various properties.
+
+=== Global properties
+These global properties affect all resources within a list file.
+
+'input_dir' and 'output_dir' (both optional) specify, respectively,
+where resources should be searched for and where the converted output
+should be placed. Their values should not end with a directory separator
+(/).
+
+=== Common properties
+These properties are common to all resource types. Unless otherwise
+stated, they are mandatory.
+
+'name' specifies the name of the resource. The array generated from this
+resource will use this name.
+
+'input' specifies the resource to be converted. This is a path relative
+to either the directory specified in the 'input_dir' global property (if
+set), or the working directory.
+
+'output' specifies the output file to be generated. Considering this
+file is written in the C language, its extension should be '.c'. This is
+a path relative to either the directory specified in the 'output_dir'
+global property (if set), or the working directory.
+
+'static' (optional) specifies whether the generated array should have
+the static modifier or not.
+
+=== Tilesets properties
+'tile_width' and 'tile_height' specify, respectively, the number of
+horizontal and vertical 8x8 tiles that make up a big tile of the
+tileset.
+
+'bpp' specifies the bits-per-pixel of the tileset. Allowed values are 4
+and 8.
+
+'palette' specifies the path, relative to the working directory, of the
+palette used to map colors to their index.
+
+'transparent' (optional) specifies a color that should be considered
+transparent (i.e., mapped to index 0). The 24-bit RGB color must be
+written in hexadecimal, with an optional '#' character at the beginning
+(e.g., '#ff00ff').
+
+=== Images properties
+'bpp' specifies the bits-per-pixel of the image. Allowed values are 8
+and 16.
+
+'palette' (only required if 'bpp' is 8) specifies the path, relative to
+the working directory, of the palette used to map colors to their index.
+This property is ignored if 'bpp' is 16.
+
+== EXAMPLES
+*convert-resources* _res/resources.json_::
+Read _res/resources.json_ and convert resources listed in that file.
+
+*convert-resources* _a.json_ _b.toml_::
+Read both _a.json_ and _b.toml_ and convert resources listed in those
+two files.
+
+=== Examples of list file
+*example.json*::
+[source,json]
+----
+{
+    "input_dir": "res",
+    "output_dir": "src/res",
+
+    "tilesets": [
+        {
+            "name": "tileset",
+
+            "input": "img/tileset.png",
+            "output": "tileset.c",
+
+            "tile_width": 2,
+            "tile_height": 2,
+
+            "palette": "res/img/palette.png",
+            "transparent": "#ff00ff",
+            "bpp": 4,
+
+            "static": true
+        }
+    ],
+    "palettes": [
+        {
+            "name": "palette",
+
+            "input": "img/palette.png",
+            "output": "palette.c"
+        }
+    ]
+}
+----
+
+*example.toml*
+[source,toml]
+----
+input_dir  = 'res'
+output_dir = 'src/res'
+
+[[images]]
+    name = 'background'
+
+    input  = 'img/background.png'
+    output = 'img/background.c'
+
+    bpp = 16
+
+    static = true
+
+[[files]]
+    name = 'music_track_1'
+
+    input  = 'music/track-1.raw'
+    output = 'music/track-1.c'
+
+[[files]]
+    name = 'music_track_2'
+
+    input  = 'music/track-2.raw'
+    output = 'music/track-2.c'
+----
+
+== AUTHORS
+*convert-resources* was written by Vulcalien <\vulcalien@vulcalien.net>.
