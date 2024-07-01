@@ -29,8 +29,9 @@ except ImportError:
     toml_support = False
 
 class Color:
-    RED   = '\033[31m\033[01m'
-    GREEN = '\033[32m\033[01m'
+    RED     = '\033[31m\033[01m'
+    GREEN   = '\033[32m\033[01m'
+    MAGENTA = '\033[35m\033[01m'
 
     RESET = '\033[0m'
 
@@ -110,8 +111,9 @@ def convert(element: dict, file_type: dict,
     if 'static' in element and bool(element['static']):
         static = True
 
-    cmd = ' '.join((
-        file_type['script'] % PARENT_PATH,
+    cmd_path = file_type['script'] % PARENT_PATH
+
+    cmd_args = ' '.join((
         '-i', f'{input_dir}/{input_file}',
         '-o', f'{output_dir}/{output_file}',
         '-n', name,
@@ -121,10 +123,13 @@ def convert(element: dict, file_type: dict,
     # Add script-specific arguments
     args_function = file_type['args_function']
     if args_function is not None:
-        cmd += ' ' + args_function(element)
+        cmd_args += ' ' + args_function(element)
 
-    print(cmd)
-    os.system(cmd)
+    print(
+        Color.MAGENTA + os.path.basename(cmd_path) + Color.RESET +
+        ' ' + cmd_args
+    )
+    os.system(cmd_path + ' ' + cmd_args)
 
 def parse_json(f):
     try:
