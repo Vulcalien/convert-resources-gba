@@ -37,7 +37,7 @@ class Color:
 
 # Setup argparse
 parser = argparse.ArgumentParser(
-    description='Convert all resources listed in JSON or TOML files'
+    description='Convert resources to embed in GBA ROMs'
 )
 
 parser.add_argument('res_list_files', nargs='+',
