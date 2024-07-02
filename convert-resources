@@ -35,6 +35,9 @@ class Color:
 
     RESET = '\033[0m'
 
+def error(msg):
+    print(Color.RED + 'Error: ' + msg + Color.RESET)
+
 # Setup argparse
 parser = argparse.ArgumentParser(
     description='Convert resources to embed in GBA ROMs'
@@ -135,20 +138,17 @@ def parse_json(f):
     try:
         return json.load(f)
     except json.JSONDecodeError as e:
-        print(Color.RED + 'Error: invalid JSON:', str(e) + Color.RESET)
+        error('invalid JSON: ' + str(e))
 
 def parse_toml(f):
     if not toml_support:
-        print(
-            Color.RED + 'Error: TOML is not supported by this ' +
-            'version of Python' + Color.RESET
-        )
+        error('TOML is not supported by this version of Python')
         return
 
     try:
         return tomllib.load(f)
     except tomllib.TOMLDecodeError as e:
-        print(Color.RED + 'Error: invalid TOML:', str(e) + Color.RESET)
+        error('invalid TOML: ' + str(e))
 
 def parse_file(f):
     parsers = {
