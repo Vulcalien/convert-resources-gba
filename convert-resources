@@ -153,9 +153,7 @@ def parse_file(f):
     try:
         content = parsers[ext](f)
     except KeyError:
-        print(
-            Color.RED + 'Error: unknown extension:', ext + Color.RESET
-        )
+        error('unknown extension: ' + ext)
 
     return content
 
