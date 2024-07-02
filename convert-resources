@@ -43,8 +43,6 @@ parser.add_argument('res_list_files', nargs='+',
                     type=argparse.FileType('rb'),
                     help='specify the resource list files')
 
-args = parser.parse_args()
-
 # Functions
 
 def tileset_args(element: dict):
@@ -155,7 +153,7 @@ def parse_file(f):
     return content
 
 # Read resource list files
-for f in args.res_list_files:
+for f in parser.parse_args().res_list_files:
     print(
         Color.GREEN + '=== Reading file:', f.name + ' ===' + Color.RESET
     )
