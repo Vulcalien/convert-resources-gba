@@ -94,7 +94,7 @@ FILE_TYPES = {
 
     'files': {
         'script': '%s/converters/file-to-array',
-        'args_function': None
+        'args_function': (lambda element : '')
     }
 }
 
@@ -102,14 +102,11 @@ PARENT_PATH = os.path.relpath(sys.path[0])
 
 def convert(element: dict, file_type: dict,
             input_dir: str, output_dir: str):
-    name = str(element['name'])
-
+    # read common properties
+    name        = str(element['name'])
     input_file  = str(element['input'])
     output_file = str(element['output'])
-
-    static = bool(element.get('static', False))
-
-    cmd_path = file_type['script'] % PARENT_PATH
+    static      = bool(element.get('static', False))
 
     cmd_args = ' '.join((
         '-i', f'{input_dir}/{input_file}',
@@ -118,11 +115,10 @@ def convert(element: dict, file_type: dict,
         '-s' if static else ''
     ))
 
-    # Add script-specific arguments
-    args_function = file_type['args_function']
-    if args_function is not None:
-        cmd_args += ' ' + args_function(element)
+    # add script-specific arguments
+    cmd_args += ' ' + file_type['args_function'](element)
 
+    cmd_path = file_type['script'] % PARENT_PATH
     print(
         Color.MAGENTA + os.path.basename(cmd_path) + Color.RESET +
         ' ' + cmd_args
