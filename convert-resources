@@ -61,9 +61,6 @@ def tileset_args(element: dict):
 
     return args
 
-def palette_args(element: dict):
-    return '--bpp 16'
-
 def image_args(element: dict):
     args = ''
 
@@ -84,7 +81,7 @@ FILE_TYPES = {
 
     'palettes': {
         'script': '%s/converters/image-to-array',
-        'args_function': palette_args
+        'args_function': (lambda element : '--bpp 16')
     },
 
     'images': {
