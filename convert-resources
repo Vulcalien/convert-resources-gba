@@ -34,17 +34,6 @@ class Color:
 def error(msg):
     print(Color.RED + 'Error: ' + msg + Color.RESET)
 
-# Setup argparse
-parser = argparse.ArgumentParser(
-    description='Convert resources to embed in GBA ROMs'
-)
-
-parser.add_argument('res_list_files', nargs='+',
-                    type=argparse.FileType('rb'),
-                    help='specify the resource list files')
-
-# Functions
-
 def tileset_args(element: dict):
     args = ''
 
@@ -161,6 +150,15 @@ def parse_file(f):
         error('unknown extension: ' + ext)
 
     return content
+
+# Setup argparse
+parser = argparse.ArgumentParser(
+    description='Convert resources to embed in GBA ROMs'
+)
+
+parser.add_argument('res_list_files', nargs='+',
+                    type=argparse.FileType('rb'),
+                    help='specify the resource list files')
 
 # Read resource list files
 for f in parser.parse_args().res_list_files:
