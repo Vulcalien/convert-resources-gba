@@ -33,8 +33,14 @@ class Color:
 
     RESET = '\033[0m'
 
-def error(msg):
+def info(msg: str):
+    print(Color.GREEN + msg + Color.RESET)
+
+def error(msg: str):
     print(Color.RED + 'Error: ' + msg + Color.RESET)
+
+def print_command(name: str, args: str):
+    print(Color.MAGENTA + name + Color.RESET + ' ' + args)
 
 # === Conversion functions === #
 
@@ -117,10 +123,8 @@ def convert(element: dict, file_type: dict,
         return
 
     cmd_path = file_type['script'] % PARENT_PATH
-    print(
-        Color.MAGENTA + os.path.basename(cmd_path) + Color.RESET +
-        ' ' + cmd_args
-    )
+    print_command(os.path.basename(cmd_path), cmd_args)
+
     os.system(cmd_path + ' ' + cmd_args)
 
 # === Parsing functions === #
@@ -170,9 +174,7 @@ parser.add_argument('res_list_files', nargs='+',
 
 # read resource list files
 for f in parser.parse_args().res_list_files:
-    print(
-        Color.GREEN + '=== Reading file:', f.name + ' ===' + Color.RESET
-    )
+    info('=== Reading file: ' + f.name + ' ===')
 
     content = parse_file(f)
     if content is None:
