@@ -15,10 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Optional values:
-#   - 'static', if absent, defaults to False
-#   - in 'images', 'palette' is ignored and not required if 'bpp' is 16
-
 import sys, os, argparse, json
 from concurrent.futures import ThreadPoolExecutor
 
@@ -106,13 +102,12 @@ PARENT_PATH = os.path.relpath(sys.path[0])
 
 def convert(element: dict, file_type: dict,
             input_dir: str, output_dir: str):
+    name = str(element['name'])
+
     input_file  = str(element['input'])
     output_file = str(element['output'])
-    name        = str(element['name'])
 
-    static = False
-    if 'static' in element and bool(element['static']):
-        static = True
+    static = bool(element.get('static', False))
 
     cmd_path = file_type['script'] % PARENT_PATH
 
