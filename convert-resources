@@ -97,21 +97,31 @@ PARENT_PATH = os.path.relpath(sys.path[0])
 
 def convert(element: dict, file_type: dict,
             input_dir: str, output_dir: str):
-    # read common properties
-    name        = str(element['name'])
-    input_file  = str(element['input'])
-    output_file = str(element['output'])
-    static      = bool(element.get('static', False))
+    try:
+        # read common properties
+        name        = str(element['name'])
+        input_file  = str(element['input'])
+        output_file = str(element['output'])
+        static      = bool(element.get('static', False))
 
-    cmd_args = ' '.join((
-        '-i', f'{input_dir}/{input_file}',
-        '-o', f'{output_dir}/{output_file}',
-        '-n', name,
-        '-s' if static else ''
-    ))
+        cmd_args = ' '.join((
+            '-i', f'{input_dir}/{input_file}',
+            '-o', f'{output_dir}/{output_file}',
+            '-n', name,
+            '-s' if static else ''
+        ))
 
-    # add script-specific arguments
-    cmd_args += ' ' + file_type['args_function'](element)
+        # add script-specific arguments
+        cmd_args += ' ' + file_type['args_function'](element)
+    except KeyError as e:
+        name = str(element.get('name', '<anonymous>'))
+        missing_property = str(e.args[0])
+
+        error(
+            f"element with name '{name}' is missing this mandatory " +
+            f"property: '{missing_property}'"
+        )
+        return
 
     cmd_path = file_type['script'] % PARENT_PATH
     print(
