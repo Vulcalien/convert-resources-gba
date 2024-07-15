@@ -94,9 +94,9 @@ FILE_TYPES = {
 
 def convert(element: dict, file_type: dict,
             input_dir: str, output_dir: str):
-    PARENT_PATH = os.path.relpath(sys.path[0])
-
     try:
+        PARENT_PATH = os.path.relpath(sys.path[0])
+
         # read common properties
         name        = str(element['name'])
         input_file  = str(element['input'])
@@ -107,11 +107,14 @@ def convert(element: dict, file_type: dict,
             '-i', f'{input_dir}/{input_file}',
             '-o', f'{output_dir}/{output_file}',
             '-n', name,
-            '-s' if static else ''
+            '-s' if static else '',
+            file_type['args_function'](element)
         ))
 
-        # add script-specific arguments
-        cmd_args += ' ' + file_type['args_function'](element)
+        cmd_path = file_type['script'] % PARENT_PATH
+        print_command(os.path.basename(cmd_path), cmd_args)
+
+        os.system(cmd_path + ' ' + cmd_args)
     except KeyError as e:
         name = str(element.get('name', '<anonymous>'))
         missing_property = str(e.args[0])
@@ -120,12 +123,8 @@ def convert(element: dict, file_type: dict,
             f"element '{file_type['list_name']}.{name}' is missing "
             f"mandatory property: '{missing_property}'"
         )
-        return
-
-    cmd_path = file_type['script'] % PARENT_PATH
-    print_command(os.path.basename(cmd_path), cmd_args)
-
-    os.system(cmd_path + ' ' + cmd_args)
+    except Exception as e:
+        error(e)
 
 # === Parsing functions === #
 
