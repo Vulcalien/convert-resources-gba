@@ -33,11 +33,11 @@ class Color:
 
     RESET = '\033[0m'
 
-def info(msg: str):
-    print(Color.GREEN + msg + Color.RESET)
+def info(msg: any):
+    print(Color.GREEN + str(msg) + Color.RESET)
 
-def error(msg: str):
-    print(Color.RED + 'Error: ' + msg + Color.RESET)
+def error(msg: any):
+    print(Color.RED + 'Error: ' + str(msg) + Color.RESET)
 
 def print_command(name: str, args: str):
     print(Color.MAGENTA + name + Color.RESET + ' ' + args)
