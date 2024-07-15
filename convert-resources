@@ -117,8 +117,8 @@ def convert(element: dict, file_type: dict,
         missing_property = str(e.args[0])
 
         error(
-            f"element with name '{name}' is missing this mandatory " +
-            f"property: '{missing_property}'"
+            f"element '{file_type['list_name']}.{name}' is missing "
+            f"mandatory property: '{missing_property}'"
         )
         return
 
@@ -171,6 +171,10 @@ parser = argparse.ArgumentParser(
 parser.add_argument('res_list_files', nargs='+',
                     type=argparse.FileType('rb'),
                     help='specify the resource list files')
+
+# add 'list_name' attribute in elements of 'FILE_TYPES' list
+for file_type in FILE_TYPES:
+    FILE_TYPES[file_type]['list_name'] = file_type
 
 # read resource list files
 for f in parser.parse_args().res_list_files:
