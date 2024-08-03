@@ -26,9 +26,6 @@ parser = argparse.ArgumentParser(
     description='Generate a GBA tileset from a tileset image'
 )
 
-parser.add_argument('-i', '--input',
-                    type=argparse.FileType('rb'), required=True,
-                    help='specify the filename of the image file')
 parser.add_argument('-n', '--name',
                     required=True,
                     help='specify the name of the output array')
@@ -49,6 +46,10 @@ parser.add_argument('--transparent',
                     type=str, default=None,
                     help='specify a color to be considered transparent')
 
+parser.add_argument('-i', '--input',
+                    type=argparse.FileType('rb'),
+                    default=sys.stdin.buffer,
+                    help='specify the input file (default: stdin)')
 parser.add_argument('-o', '--output',
                     type=argparse.FileType('w'), default=sys.stdout,
                     help='specify the output file (default: stdout)')
