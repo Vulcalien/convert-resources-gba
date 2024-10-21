@@ -74,12 +74,8 @@ class DataWriter:
     def write(self, value: int):
         f = self.output
 
-        # convert value to an hexadecimal string
-        hex_code = hex(value)[2:]
-        hex_code = hex_code.zfill(2 * self.datasize)
-        hex_code = '0x' + hex_code
-
-        f.write(hex_code + ',')
+        # write value as an hexadecimal string
+        f.write(f'0x%0{2 * self.datasize}x,' % value)
 
         # if necessary, add a newline
         if self.write_count % self.threshold == self.threshold - 1:

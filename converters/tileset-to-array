@@ -19,9 +19,10 @@ import sys, argparse
 from sys import exit
 from PIL import Image
 
-from utils import load_palette, DataWriter
+import utils
+from utils import DataWriter
 
-# Setup argparse
+# ========================== Setup argparse ========================== #
 parser = argparse.ArgumentParser(
     description='Generate a GBA tileset from a tileset image'
 )
@@ -59,6 +60,7 @@ parser.add_argument('-s', '--static',
                          'array')
 
 args = parser.parse_args()
+# ==================================================================== #
 
 # Open image
 img = Image.open(args.input).convert('RGB')
@@ -71,7 +73,7 @@ big_tile_size      = args.tile_width * args.tile_height
 bytes_per_8x8_tile = (32 if args.bpp == 4 else 64)
 
 # Read the palette file
-color_map = load_palette(args.palette, args.bpp)
+color_map = utils.load_palette(args.palette, args.bpp)
 
 if args.transparent is not None:
     hex_code = args.transparent.lstrip('#')
@@ -87,9 +89,8 @@ writer = DataWriter(args.output, 'u8')
 
 def assert_color_in_palette(pix):
     if pix not in color_map:
-        col = pix[0] << 16 | pix[1] << 8 | pix[2]
-        col = hex(col)[2:].zfill(6)
-        exit('Error: color not present in the palette: #' + col)
+        col = ('%02x' * 3) % pix
+        exit(f'Error: color not present in the palette: #{col}')
 
 def scan_8x8_tile_8bpp(x0, y0):
     for y in range(8):

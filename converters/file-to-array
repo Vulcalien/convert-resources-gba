@@ -19,7 +19,7 @@ import sys, argparse
 
 from utils import DataWriter
 
-# Setup argparse
+# ========================== Setup argparse ========================== #
 parser = argparse.ArgumentParser(
     description='Convert a file into an array'
 )
@@ -41,6 +41,7 @@ parser.add_argument('-s', '--static',
                          'array')
 
 args = parser.parse_args()
+# ==================================================================== #
 
 # Read file contents
 contents = args.input.read()
