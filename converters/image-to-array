@@ -30,7 +30,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('-n', '--name',
                     required=True,
                     help='specify the name of the output array')
-parser.add_argument('--bpp',
+parser.add_argument('-b', '--bpp',
                     type=int, choices=[4, 8, 16], required=True,
                     help='specify the bits per pixel')
 
