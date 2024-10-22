@@ -35,17 +35,19 @@ parser.add_argument('--bpp',
                     help='specify the bits per pixel')
 parser.add_argument('--tile-width',
                     type=int, required=True,
+                    metavar='WIDTH',
                     help='specify the width of a tile')
 parser.add_argument('--tile-height',
                     type=int, required=True,
+                    metavar='HEIGHT',
                     help='specify the height of a tile')
 
 parser.add_argument('--palette',
-                    type=argparse.FileType('rb'), required=True,
+                    type=argparse.FileType('rb'),
                     help='specify the filename of the palette file')
-parser.add_argument('--transparent',
-                    type=str, default=None,
-                    help='specify a color to be considered transparent')
+parser.add_argument('-c', '--color', action='append',
+                    metavar='COLOR=INDEX',
+                    help='specify a COLOR=INDEX mapping pair')
 
 parser.add_argument('-i', '--input',
                     type=argparse.FileType('rb'),
@@ -72,17 +74,17 @@ tileset_size = tileset_w * tileset_h
 big_tile_size      = args.tile_width * args.tile_height
 bytes_per_8x8_tile = (32 if args.bpp == 4 else 64)
 
-# Read the palette file
+# Retrieve color-to-index lookup table
 color_map = utils.load_palette(args.palette, args.bpp)
 
-if args.transparent is not None:
-    hex_code = args.transparent.lstrip('#')
-    val = (
-        int(hex_code[0:2], 16),
-        int(hex_code[2:4], 16),
-        int(hex_code[4:6], 16)
-    )
-    color_map[val] = 0
+if args.color:
+    for color_pair in args.color:
+        color_str, index_str = color_pair.split('=')
+
+        color = utils.string_to_rgb(color_str)
+        index = int(index_str) % (2 ** args.bpp)
+
+        color_map[color] = index
 
 # Scan the tileset and write output
 writer = DataWriter(args.output, 'u8')

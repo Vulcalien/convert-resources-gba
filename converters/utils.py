@@ -23,6 +23,9 @@ from PIL import Image
 # output:
 #   color-to-index lookup table
 def load_palette(path: str, bpp: int):
+    if path is None:
+        return {}
+
     result = {}
 
     img = Image.open(path).convert('RGB')

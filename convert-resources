@@ -54,7 +54,7 @@ def tileset_args(element: dict):
     args += ' --bpp "%d"'     % int(element['bpp'])
 
     if 'transparent' in element:
-        args += ' --transparent "%s"' % str(element['transparent'])
+        args += ' -c "%s=0"' % str(element['transparent'])
 
     return args
 
