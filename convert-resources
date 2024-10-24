@@ -50,8 +50,8 @@ def tileset_args(element: dict):
     args += ' --tile-width %d'  % int(element['tile_width'])
     args += ' --tile-height %d' % int(element['tile_height'])
 
-    args += ' --palette "%s"' % str(element['palette'])
-    args += ' -b %d'          % int(element['bpp'])
+    args += ' -p "%s"' % str(element['palette'])
+    args += ' -b %d'   % int(element['bpp'])
 
     if 'colors' in element:
         for color, index in element['colors'].items():
@@ -66,8 +66,7 @@ def image_args(element: dict):
     args += ' -b %d' % bpp
 
     if bpp in (4, 8):
-        palette = str(element['palette'])
-        args += ' --palette "%s"' % palette
+        args += ' -p "%s"' % str(element['palette'])
 
     return args
 

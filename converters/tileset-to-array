@@ -42,7 +42,7 @@ parser.add_argument('--tile-height',
                     metavar='HEIGHT',
                     help='specify the height of a tile')
 
-parser.add_argument('--palette',
+parser.add_argument('-p', '--palette',
                     type=argparse.FileType('rb'),
                     help='specify the filename of the palette file')
 parser.add_argument('-c', '--color', action='append',

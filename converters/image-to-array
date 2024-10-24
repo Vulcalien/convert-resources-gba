@@ -34,7 +34,7 @@ parser.add_argument('-b', '--bpp',
                     type=int, choices=[4, 8, 16], required=True,
                     help='specify the bits per pixel')
 
-parser.add_argument('--palette',
+parser.add_argument('-p', '--palette',
                     type=argparse.FileType('rb'),
                     help='specify the filename of the palette file')
 
