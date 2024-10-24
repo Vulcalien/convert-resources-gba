@@ -15,26 +15,30 @@
 
 from PIL import Image
 
-# Load a palette image file and create a color-to-index lookup table.
-#
-# input:
-#   path - palette image filepath
-#   bpp  - bits per pixel
-# output:
-#   color-to-index lookup table
-def load_palette(path: str, bpp: int):
-    if path is None:
-        return {}
-
+def build_palette(bpp: int, filepath: str, mappings: list[str]):
+    color_count = 2 ** bpp
     result = {}
 
-    img = Image.open(path).convert('RGB')
-    for y in range(img.height):
-        for x in range(img.width):
-            pix = img.getpixel( (x, y) )
+    # read palette file
+    if filepath is not None:
+        img = Image.open(filepath).convert('RGB')
+        for y in range(img.height):
+            for x in range(img.width):
+                pix = img.getpixel( (x, y) )
 
-            if pix not in result:
-                result[pix] = (x + y * img.width) % (2 ** bpp)
+                if pix not in result:
+                    result[pix] = (x + y * img.width) % color_count
+
+    # parse mappings
+    if mappings is not None:
+        for mapping in mappings:
+            color_str, index_str = mapping.split('=')
+
+            color = string_to_rgb(color_str)
+            index = int(index_str) % color_count
+
+            result[color] = index
+
     return result
 
 def string_to_rgb(arg: str):

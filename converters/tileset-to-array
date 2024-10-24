@@ -75,16 +75,7 @@ big_tile_size      = args.tile_width * args.tile_height
 bytes_per_8x8_tile = (32 if args.bpp == 4 else 64)
 
 # Retrieve color-to-index lookup table
-color_map = utils.load_palette(args.palette, args.bpp)
-
-if args.color:
-    for color_pair in args.color:
-        color_str, index_str = color_pair.split('=')
-
-        color = utils.string_to_rgb(color_str)
-        index = int(index_str) % (2 ** args.bpp)
-
-        color_map[color] = index
+color_map = utils.build_palette(args.bpp, args.palette, args.color)
 
 # Scan the tileset and write output
 writer = DataWriter(args.output, 'u8')
