@@ -13,7 +13,7 @@
             "tile_height": 4,
 
             "palette": "my/input/palette.png",
-            "transparent": "#ff00ff",
+            "colors": { "#ff00ff": 0 },
             "bpp": 4,
 
             "static": true

@@ -53,8 +53,9 @@ def tileset_args(element: dict):
     args += ' --palette "%s"' % str(element['palette'])
     args += ' -b %d'          % int(element['bpp'])
 
-    if 'transparent' in element:
-        args += ' -c "%s=0"' % str(element['transparent'])
+    if 'colors' in element:
+        for color, index in element['colors'].items():
+            args += ' -c "%s=%s"' % (str(color), str(index))
 
     return args
 
