@@ -103,13 +103,12 @@ def scan_8x8_tile_4bpp(x0, y0):
 
             writer.write(color_map[pix1] << 4 | color_map[pix0])
 
-def scan_8x8_tile(x0, y0):
-    if args.bpp == 8:
-        scan_8x8_tile_8bpp(x0, y0)
-    elif args.bpp == 4:
-        scan_8x8_tile_4bpp(x0, y0)
-
 def scan_big_tile(x0, y0):
+    scan_8x8_tile = {
+        4: scan_8x8_tile_4bpp,
+        8: scan_8x8_tile_8bpp
+    }[args.bpp]
+
     for ysubtile in range(args.tile_height):
         for xsubtile in range(args.tile_width):
             scan_8x8_tile(
