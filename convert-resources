@@ -47,8 +47,15 @@ def print_command(name: str, args: str):
 def tileset_args(element: dict):
     args = ''
 
-    args += ' --tile-width %d'  % int(element['tile_width'])
-    args += ' --tile-height %d' % int(element['tile_height'])
+    # parse tile size
+    tile_size = element['tile_size']
+    if isinstance(tile_size, list):
+        tile_width, tile_height = map(int, tile_size)
+    else:
+        tile_width = tile_height = int(tile_size)
+
+    args += ' --tile-width %d'  % tile_width
+    args += ' --tile-height %d' % tile_height
 
     args += ' -b %d' % int(element['bpp'])
 

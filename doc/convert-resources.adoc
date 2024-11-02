@@ -2,7 +2,7 @@
 :doctype: manpage
 :manmanual: Manual for convert-resources
 :mansource: convert-resources
-:revdate: 2024-10-24
+:revdate: 2024-11-02
 :docdate: {revdate}
 
 == NAME
@@ -83,9 +83,10 @@ the 'output_dir' global property (if set), or the working directory.
 the static modifier or not.
 
 === Tilesets properties
-'tile_width' and 'tile_height' specify, respectively, the number of
-horizontal and vertical 8x8 tiles that make up a big tile of the
-tileset.
+'tile_size' specifies the number of horizontal and vertical 8x8 tiles
+that make up a big tile of the tileset. This property can either be a
+list of two integers (width and height) or a single integer (side length
+of the square).
 
 'bpp' specifies the bits-per-pixel of the tileset. Allowed values are 4
 and 8.
@@ -130,8 +131,7 @@ two files.
             "input": "img/tileset.png",
             "output": "tileset.c",
 
-            "tile_width": 2,
-            "tile_height": 2,
+            "tile_size": [ 2, 2 ],
 
             "palette": "res/img/palette.png",
             "colors": {

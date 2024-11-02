@@ -9,8 +9,7 @@
             "input": "img/tileset.png",
             "output": "tileset.c",
 
-            "tile_width": 2,
-            "tile_height": 2,
+            "tile_size": 2,
 
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
@@ -24,8 +23,7 @@
             "input": "img/spritesheet.png",
             "output": "spritesheet.c",
 
-            "tile_width": 2,
-            "tile_height": 3,
+            "tile_size": [ 2, 3 ],
 
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },

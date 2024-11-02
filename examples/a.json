@@ -9,8 +9,7 @@
             "input": "my/input/tileset.png",
             "output": "my/output/tileset.c",
 
-            "tile_width": 2,
-            "tile_height": 4,
+            "tile_size": [ 2, 4 ],
 
             "palette": "my/input/palette.png",
             "colors": { "#ff00ff": 0 },
