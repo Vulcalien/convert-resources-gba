@@ -15,35 +15,66 @@
 
 from PIL import Image
 
-def build_palette(bpp: int, filepath: str, mappings: list[str]):
-    color_count = 2 ** bpp
-    result = {}
-
-    # read palette file
-    if filepath is not None:
-        img = Image.open(filepath).convert('RGB')
-        for y in range(img.height):
-            for x in range(img.width):
-                pix = img.getpixel( (x, y) )
-
-                if pix not in result:
-                    result[pix] = (x + y * img.width) % color_count
-
-    # parse mappings
-    if mappings is not None:
-        for mapping in mappings:
-            color_str, index_str = mapping.split('=')
-
-            color = string_to_rgb(color_str)
-            index = int(index_str) % color_count
-
-            result[color] = index
-
-    return result
-
 def string_to_rgb(arg: str):
     arg = arg.lstrip('#')
     return tuple(int(arg[i:i+2], 16) for i in (0, 2, 4))
+
+# ========================== class Palette =========================== #
+
+class Palette:
+
+    # each row is a sub-palette
+    rows = None
+
+    def __init__(self, bpp: int, filepath: str, mappings: list[str]):
+        """Create a palette object, reading the information from a
+        palette file and/or a list of string mappings"""
+
+        self.rows = [ {} ]
+
+        # how many *distinct* indices a palette row can point to
+        row_size = 2 ** bpp
+
+        # read palette file
+        if filepath is not None:
+            img = Image.open(filepath).convert('RGB')
+            for i in range(img.width * img.height):
+                pix = img.getpixel( (i % img.width, i // img.width) )
+
+                # get (or create) current row based on pixel position
+                row_index = i // row_size
+                if row_index == len(self.rows):
+                    self.rows.append( {} )
+                row = self.rows[row_index]
+
+                # if the color is NOT already present in the row, map it
+                if pix not in row:
+                    row[pix] = i % row_size
+
+        # parse mappings
+        for mapping in mappings or []:
+            color_str, index_str = mapping.split('=')
+
+            color = string_to_rgb(color_str)
+            index = int(index_str) % row_size
+
+            # map the color in all rows
+            for row in self.rows:
+                row[color] = index
+
+    def find_row(self, img: Image):
+        """Find a row containing all colors inside an image"""
+        colors = frozenset(map(
+            lambda x : x[1],
+            img.getcolors(maxcolors=512)
+        ))
+
+        for row in self.rows:
+            if colors.issubset(row):
+                return row
+        return None
+
+# ========================= class DataWriter ========================= #
 
 class DataWriter:
 

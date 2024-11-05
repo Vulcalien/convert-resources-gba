@@ -19,8 +19,7 @@ import sys, argparse
 from sys import exit
 from PIL import Image
 
-import utils
-from utils import DataWriter
+from utils import Palette, DataWriter
 
 # ========================== Setup argparse ========================== #
 parser = argparse.ArgumentParser(
@@ -74,36 +73,33 @@ tileset_size = tileset_w * tileset_h
 big_tile_size      = args.tile_width * args.tile_height
 bytes_per_8x8_tile = (32 if args.bpp == 4 else 64)
 
-# Retrieve color-to-index lookup table
-color_map = utils.build_palette(args.bpp, args.palette, args.color)
+# Create palette
+palette = Palette(args.bpp, args.palette, args.color)
 
 # Scan the tileset and write output
 writer = DataWriter(args.output, 'u8')
 
-def assert_color_in_palette(pix):
-    if pix not in color_map:
-        col = ('%02x' * 3) % pix
-        exit(f'Error: color not present in the palette: #{col}')
-
-def scan_8x8_tile_8bpp(x0, y0):
+def scan_8x8_tile_8bpp(x0: int, y0: int, palette_row: dict):
     for y in range(8):
         for x in range(8):
             pix = img.getpixel( (x0 + x, y0 + y) )
-            assert_color_in_palette(pix)
-            writer.write(color_map[pix])
+            writer.write(palette_row[pix])
 
-def scan_8x8_tile_4bpp(x0, y0):
+def scan_8x8_tile_4bpp(x0: int, y0: int, palette_row: dict):
     for y in range(8):
         for x in range(0, 8, 2):
             pix0 = img.getpixel( (x0 + x,     y0 + y) )
             pix1 = img.getpixel( (x0 + x + 1, y0 + y) )
 
-            assert_color_in_palette(pix0)
-            assert_color_in_palette(pix1)
+            writer.write(palette_row[pix1] << 4 | palette_row[pix0])
 
-            writer.write(color_map[pix1] << 4 | color_map[pix0])
+def scan_big_tile(x0: int, y0: int):
+    palette_row = palette.find_row(img.crop(
+        (x0, y0, x0 + args.tile_width * 8, y0 + args.tile_height * 8)
+    ))
+    if palette_row is None:
+        exit('Error: no palette contains the required colors')
 
-def scan_big_tile(x0, y0):
     scan_8x8_tile = {
         4: scan_8x8_tile_4bpp,
         8: scan_8x8_tile_8bpp
@@ -113,7 +109,8 @@ def scan_big_tile(x0, y0):
         for xsubtile in range(args.tile_width):
             scan_8x8_tile(
                 x0 + xsubtile * 8,
-                y0 + ysubtile * 8
+                y0 + ysubtile * 8,
+                palette_row
             )
 
 writer.begin(
