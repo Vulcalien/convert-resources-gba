@@ -2,7 +2,7 @@
 :doctype: manpage
 :manmanual: Manual for convert-resources
 :mansource: convert-resources
-:revdate: 2024-11-02
+:revdate: 2024-11-16
 :docdate: {revdate}
 
 == NAME
@@ -127,26 +127,22 @@ two files.
     "tilesets": [
         {
             "name": "tileset",
-
             "input": "img/tileset.png",
             "output": "tileset.c",
+            "static": true,
 
             "tile_size": [ 2, 2 ],
-
             "palette": "res/img/palette.png",
             "colors": {
                 "#ff00ff": 0,
                 "#000000": 15
             },
-            "bpp": 4,
-
-            "static": true
+            "bpp": 4
         }
     ],
     "palettes": [
         {
             "name": "palette",
-
             "input": "img/palette.png",
             "output": "palette.c"
         }
@@ -161,24 +157,20 @@ input_dir  = 'res'
 output_dir = 'src/res'
 
 [[images]]
-    name = 'background'
-
+    name   = 'background'
     input  = 'img/background.png'
     output = 'img/background.c'
+    static = true
 
     bpp = 16
 
-    static = true
-
 [[files]]
-    name = 'music_track_1'
-
+    name   = 'music_track_1'
     input  = 'music/track-1.raw'
     output = 'music/track-1.c'
 
 [[files]]
-    name = 'music_track_2'
-
+    name   = 'music_track_2'
     input  = 'music/track-2.raw'
     output = 'music/track-2.c'
 ----

@@ -5,39 +5,50 @@
     "tilesets": [
         {
             "name": "tileset",
-
             "input": "img/tileset.png",
             "output": "tileset.c",
+            "static": true,
 
             "tile_size": 2,
-
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
-            "bpp": 4,
-
-            "static": true
-        },
-        {
+            "bpp": 4
+        }, {
             "name": "spritesheet",
-
             "input": "img/spritesheet.png",
             "output": "spritesheet.c",
+            "static": true,
 
             "tile_size": [ 2, 3 ],
-
             "palette": "res/img/palette.png",
             "colors": { "#ff00ff": 0 },
-            "bpp": 4,
-
-            "static": true
+            "bpp": 4
         }
     ],
     "palettes": [
         {
             "name": "palette",
-
             "input": "img/palette.png",
             "output": "palette.c"
+        }
+    ],
+
+    "images": [
+        {
+            "name": "splash_screen",
+            "input": "img/splash-screen.png",
+            "output": "splash-screen.c",
+
+            "bpp": 16
+        }
+    ],
+
+    "files": [
+        {
+            "name": "dialog_text",
+            "input": "text/dialog.txt",
+            "output": "dialog.c",
+            "static": true
         }
     ]
 }

@@ -2,23 +2,19 @@ input_dir  = 'res'
 output_dir = 'src/res'
 
 [[images]]
-    name = 'background'
-
+    name   = 'background'
     input  = 'img/background.png'
     output = 'img/background.c'
+    static = true
 
     bpp = 16
 
-    static = true
-
 [[files]]
-    name = 'music_track_1'
-
+    name   = 'music_track_1'
     input  = 'music/track-1.raw'
     output = 'music/track-1.c'
 
 [[files]]
-    name = 'music_track_2'
-
+    name   = 'music_track_2'
     input  = 'music/track-2.raw'
     output = 'music/track-2.c'
