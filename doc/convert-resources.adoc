@@ -2,7 +2,7 @@
 :doctype: manpage
 :manmanual: Manual for convert-resources
 :mansource: convert-resources
-:revdate: 2024-11-16
+:revdate: 2024-11-22
 :docdate: {revdate}
 
 == NAME
@@ -70,14 +70,14 @@ stated, they are mandatory.
 'name' specifies the name of the resource. The array generated from this
 resource will use this name.
 
-'input' (optional) specifies the resource to be converted. This is a
-path relative to either the directory specified in the 'input_dir'
-global property (if set), or the working directory.
+'input' specifies the resource to be converted. This is a path relative
+to either the directory specified in the 'input_dir' global property (if
+set), or the working directory.
 
-'output' (optional) specifies the output file to be generated.
-Considering this file is written in the C language, its extension should
-be '.c'. This is a path relative to either the directory specified in
-the 'output_dir' global property (if set), or the working directory.
+'output' specifies the output file to be generated. Considering this
+file is written in the C language, its extension should be '.c'. This is
+a path relative to either the directory specified in the 'output_dir'
+global property (if set), or the working directory.
 
 'static' (optional) specifies whether the generated array should have
 the static modifier or not.
