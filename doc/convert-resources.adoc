@@ -104,9 +104,11 @@ priority over the palette file.
 *bpp* - integer::
 Bits-per-pixel of the image. Allowed values are 8 and 16.
 
-*palette* - string (required if 'bpp' = 8, ignored if 'bpp' = 16)::
-Pathname of the palette used to map colors to their index, relative to
-the working directory (not affected by 'input_dir').
+*palette* - string (optional)::
+Same as tilesets property: see above.
+
+*colors* - object (optional)::
+Same as tilesets property: see above.
 
 == EXAMPLES
 *convert-resources* _res/resources.json_::
