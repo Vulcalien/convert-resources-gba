@@ -49,7 +49,8 @@ input file.
 
 == FILE FORMAT
 === General rules
-A file may contain global properties and lists of resources.
+A file may contain global properties and lists of resources. Unless
+otherwise stated, properties are mandatory.
 
 A list of resources is named after the type of resources it contains
 (e.g., 'tilesets', 'images'). Each resource is listed as an object with
@@ -58,55 +59,54 @@ various properties.
 === Global properties
 These global properties affect all resources within a list file.
 
-'input_dir' and 'output_dir' (both optional) specify, respectively,
-where resources should be searched for and where the converted output
-should be placed. Their values should not end with a directory separator
-(/).
+*input_dir*, *output_dir* - string (both optional)::
+The directories in which to, respectively, search for input resources
+and place output files. Their values should not end with a directory
+separator (/).
 
 === Common properties
-These properties are common to all resource types. Unless otherwise
-stated, they are mandatory.
+*name* - string::
+The name of the resource, used by the generated array.
 
-'name' specifies the name of the resource. The array generated from this
-resource will use this name.
+*input* - string::
+Pathname of the resource file to convert, relative to either the
+'input_dir' global property (if set) or the working directory.
 
-'input' specifies the resource to be converted. This is a path relative
-to either the directory specified in the 'input_dir' global property (if
-set), or the working directory.
+*output* - string::
+Pathname of the output file to generate, relative to either the
+'output_dir' global property (if set) or the working directory.
 
-'output' specifies the output file to be generated. Considering this
-file is written in the C language, its extension should be '.c'. This is
-a path relative to either the directory specified in the 'output_dir'
-global property (if set), or the working directory.
-
-'static' (optional) specifies whether the generated array should have
-the static modifier or not.
+*static* - boolean (optional)::
+Whether the generated array should have the *static* modifier or not.
+Defaults to *false*.
 
 === Tilesets properties
-'tile_size' specifies the number of horizontal and vertical 8x8 tiles
-that make up a big tile of the tileset. This property can either be a
-list of two integers (width and height) or a single integer (side length
-of the square).
+*tile_size* - integer _or_ list::
+The number of horizontal and vertical 8x8 tiles that make up a big tile
+of the tileset. This property can either be a list of two integers
+(width and height) or a single integer (side length of the square).
 
-'bpp' specifies the bits-per-pixel of the tileset. Allowed values are 4
-and 8.
+*bpp* - integer::
+Bits-per-pixel of the tileset. Allowed values are *4* and *8*.
 
-'palette' (optional) specifies the path, relative to the working
-directory, of the palette used to map colors to their index.
+*palette* - string (optional)::
+Pathname of the palette used to map colors to their index, relative to
+the working directory (not affected by 'input_dir').
 
-'colors' (optional) specifies color-to-index mappings as a key-value
-object in the form "COLOR": INDEX. The 24-bit RGB color must be written
-in hexadecimal, with an optional '#' character at the beginning (e.g.,
-'#ff00ff'), while the index must be an integer number. Color mappings
-specified here take priority over the palette file.
+*colors* - object (optional)::
+Color-to-index mappings listed as a key-value object in the form
+*"COLOR": INDEX*. The 24-bit RGB color must be written in hexadecimal,
+with an optional '#' character at the beginning (e.g., '#ff00ff'), while
+the index must be an integer number. Color mappings specified here take
+priority over the palette file.
 
 === Images properties
-'bpp' specifies the bits-per-pixel of the image. Allowed values are 8
-and 16.
+*bpp* - integer::
+Bits-per-pixel of the image. Allowed values are 8 and 16.
 
-'palette' (only required if 'bpp' is 8) specifies the path, relative to
-the working directory, of the palette used to map colors to their index.
-This property is ignored if 'bpp' is 16.
+*palette* - string (required if 'bpp' = 8, ignored if 'bpp' = 16)::
+Pathname of the palette used to map colors to their index, relative to
+the working directory (not affected by 'input_dir').
 
 == EXAMPLES
 *convert-resources* _res/resources.json_::
