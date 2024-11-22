@@ -71,11 +71,14 @@ def tileset_args(element: dict):
 def image_args(element: dict):
     args = ''
 
-    bpp = int(element['bpp'])
-    args += ' -b %d' % bpp
+    args += ' -b %d' % int(element['bpp'])
 
-    if bpp in (4, 8):
+    if 'palette' in element:
         args += ' -p "%s"' % str(element['palette'])
+
+    if 'colors' in element:
+        for color, index in element['colors'].items():
+            args += ' -c "%s=%s"' % (str(color), str(index))
 
     return args
 
