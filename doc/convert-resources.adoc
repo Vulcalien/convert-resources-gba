@@ -2,7 +2,7 @@
 :doctype: manpage
 :manmanual: Manual for convert-resources
 :mansource: convert-resources
-:revdate: 2024-11-22
+:revdate: 2024-11-23
 :docdate: {revdate}
 
 == NAME
@@ -59,10 +59,11 @@ various properties.
 === Global properties
 These global properties affect all resources within a list file.
 
-*input_dir*, *output_dir* - string (both optional)::
-The directories in which to, respectively, search for input resources
-and place output files. Their values should not end with a directory
-separator (/).
+*input_dir* - string (optional)::
+Pathname of the directory in which to search for input resources.
+
+*output_dir* - string (optional)::
+Pathname of the directory in which to place output files.
 
 === Common properties
 *name* - string::
