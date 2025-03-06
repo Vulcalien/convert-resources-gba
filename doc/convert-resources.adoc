@@ -2,7 +2,7 @@
 :doctype: manpage
 :manmanual: Manual for convert-resources
 :mansource: convert-resources
-:revdate: 2024-11-23
+:revdate: 2025-03-06
 :docdate: {revdate}
 
 == NAME
@@ -12,62 +12,52 @@ convert-resources - convert resources to embed in GBA ROMs
 *convert-resources* [*-h*] _FILE_...
 
 == DESCRIPTION
-Convert resources listed in the specified files into GBA-friendly
-formats to embed them in ROMs.
+Convert resources listed in the specified files into GBA-readable
+formats for easy embedding into ROMs. Resources are converted into C
+arrays of uncompressed data which can be compiled or included into other
+code.
 
-The list files can be in JSON or TOML format, and must be identified by,
-respectively, the '.json' and '.toml' extensions.
-
-Each resource is converted into a file containing a C array of type *u8*
-(unsigned 8-bit) or *u16* (unsigned 16-bit). The data is encoded in a
-way that makes it simple to use on the GBA: uncompressed and formatted
-according to the resource's type and properties. The output file can be
-compiled directly or included into other code.
+Each input _FILE_ must be a valid JSON or TOML file, respectively having
+the '.json' and '.toml' extensions. These files can be used to list the
+resources to convert. See FILE FORMAT for details.
 
 === Resource types
-The supported resource types are: *'tilesets'*, *'palettes'*, *'images'*
-and *'files'*.
+*tilesets*::
+Images composed of tiles of a given size, converted into arrays of type
+*u8* (unsigned 8-bit). Each tile is made up of 8x8 blocks. To match the
+behavior of GBA hardware, the scanning order is: tiles, blocks, pixels.
 
-*'tilesets'* are images composed of tiles of a given size. Each big tile
-is made up of 8x8 tiles. The output is written in such a way that 8x8
-tiles within the same big tile are stored consecutively. Tilesets may
-have a BPP (bits-per-pixel) of either 4 or 8. A palette is required to
-map each color into an index.
+*palettes*::
+Images acting as lists of 16-bit colors, converted into arrays of type
+*u16* (unsigned 16-bit). Pixels are scanned line by line.
 
-*'palettes'* are images converted into a one-dimensional, uncompressed
-u16 array of colors. There is no restriction on how many colors a
-palette can contain.
+*images*::
+Generic images, converted into arrays of type *u8* (unsigned 8-bit) or
+*u16* (unsigned 16-bit), depending on the bits-per-pixel property.
+Pixels are scanned line by line.
 
-*'images'* are converted into a one-dimensional, uncompressed array of
-pixels. An image's BPP (bits-per-pixel) can be either 8 or 16, resulting
-in the output array having type u8 or u16. If the BPP is 8, a palette is
-required to map each color into an index.
-
-*'files'* are translated directly without applying any conversion. The
-generated output is a u8 array containing the exact same bytes as the
-input file.
+*files*::
+Generic files translated directly into arrays of type *u8* (unsigned
+8-bit) without applying any conversion. These may contain text, raw
+audio, level files...
 
 == FILE FORMAT
-=== General rules
-A file may contain global properties and lists of resources. Unless
-otherwise stated, properties are mandatory.
-
-A list of resources is named after the type of resources it contains
-(e.g., 'tilesets', 'images'). Each resource is listed as an object with
-various properties.
+An input _FILE_ may contain global properties and lists of resources.
+Lists of resources are named after the type of resource contained (e.g.,
+'images', 'palettes'). Each entry is an object with various properties.
 
 === Global properties
-These global properties affect all resources within a list file.
+Global properties affect all resources within the same list file.
 
 *input_dir* - string (optional)::
-Pathname of the directory in which to search for input resources.
+Pathname of the base directory in which to search for input resources.
 
 *output_dir* - string (optional)::
-Pathname of the directory in which to place output files.
+Pathname of the base directory in which to place output files.
 
 === Common properties
 *name* - string::
-The name of the resource, used by the generated array.
+Name of the resource, used to name the generated array.
 
 *input* - string::
 Pathname of the resource file to convert, relative to either the
@@ -83,33 +73,34 @@ Defaults to *false*.
 
 === Tilesets properties
 *tile_size* - integer _or_ list::
-The number of horizontal and vertical 8x8 tiles that make up a big tile
-of the tileset. This property can either be a list of two integers
-(width and height) or a single integer (side length of the square).
+How many horizontal and vertical blocks make up a tile of the tileset.
+This property can either be a list of two integers (width and height) or
+a single integer if width and height are the same.
 
 *bpp* - integer::
-Bits-per-pixel of the tileset. Allowed values are *4* and *8*.
+Bits-per-pixel (or color depth) of the tileset. Allowed values are *4*
+and *8*.
 
 *palette* - string (optional)::
 Pathname of the palette used to map colors to their index, relative to
 the working directory (not affected by 'input_dir').
 
 *colors* - object (optional)::
-Color-to-index mappings listed as a key-value object in the form
-*"COLOR": INDEX*. The 24-bit RGB color must be written in hexadecimal,
-with an optional '#' character at the beginning (e.g., '#ff00ff'), while
-the index must be an integer number. Color mappings specified here take
-priority over the palette file.
+Table of color-to-index mappings in the form *"COLOR": INDEX*. The
+24-bit RGB color must be written in hexadecimal, with an optional '#'
+character at the beginning (e.g., #ff00ff), while the index must be an
+integer. Color mappings specified here take priority over the palette.
 
 === Images properties
 *bpp* - integer::
-Bits-per-pixel of the image. Allowed values are 8 and 16.
+Bits-per-pixel (or color depth) of the image. Allowed values are *8* and
+*16*.
 
 *palette* - string (optional)::
-Same as tilesets property: see above.
+Same as the property for tilesets: see above.
 
 *colors* - object (optional)::
-Same as tilesets property: see above.
+Same as the property for tilesets: see above.
 
 == EXAMPLES
 *convert-resources* _res/resources.json_::
