@@ -2,7 +2,7 @@
 :doctype: manpage
 :manmanual: Manual for convert-resources
 :mansource: convert-resources
-:revdate: 2025-03-06
+:revdate: 2025-03-08
 :docdate: {revdate}
 
 == NAME
@@ -40,6 +40,26 @@ Pixels are scanned line by line.
 Generic files translated directly into arrays of type *u8* (unsigned
 8-bit) without applying any conversion. These may contain text, raw
 audio, level files...
+
+=== Color mapping of images
+Images converted to 4 or 8 bits-per-pixel are encoded using indexed
+colors, that is, pixels are stored in memory as palette indexes. When
+converting such images, one or more color-to-index lookup tables must be
+defined.
+
+For *tilesets*, all pixels within a tile are mapped using the same
+lookup table. For *images*, all pixels of the entire image are mapped
+using the same lookup table. In both cases, the lookup table used is the
+first that contains all the colors inside the area.
+
+A palette image, treated as a 1-dimensional array of colors, can be used
+to supply the lookup tables. The palette is split into rows of 16 or 256
+colors, for 4 or 8 bits-per-pixel, respectively. Each row defines a
+lookup table: colors are mapped to their first position within the row.
+
+Additional color mappings can be added to all lookup tables by listing
+them in the *'colors'* property of images and tilesets. These mappings
+take priority over the palette image. See below for details.
 
 == FILE FORMAT
 An input _FILE_ may contain global properties and lists of resources.
