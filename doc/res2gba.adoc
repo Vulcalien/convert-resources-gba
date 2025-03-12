@@ -1,15 +1,15 @@
-= convert-resources(1)
+= res2gba(1)
 :doctype: manpage
-:manmanual: Manual for convert-resources
-:mansource: convert-resources
-:revdate: 2025-03-08
+:manmanual: Manual for res2gba
+:mansource: res2gba
+:revdate: 2025-03-12
 :docdate: {revdate}
 
 == NAME
-convert-resources - convert resources to embed in GBA ROMs
+res2gba - convert resources to embed in GBA ROMs
 
 == SYNOPSIS
-*convert-resources* [*-h*] _FILE_...
+*res2gba* [*-h*] _FILE_...
 
 == DESCRIPTION
 Convert resources listed in the specified files into GBA-readable
@@ -123,10 +123,10 @@ Same as the property for tilesets: see above.
 Same as the property for tilesets: see above.
 
 == EXAMPLES
-*convert-resources* _res/resources.json_::
+*res2gba* _res/resources.json_::
 Read _res/resources.json_ and convert resources listed in that file.
 
-*convert-resources* _a.json_ _b.toml_::
+*res2gba* _a.json_ _b.toml_::
 Read both _a.json_ and _b.toml_ and convert resources listed in those
 two files.
 
@@ -190,4 +190,4 @@ output_dir = 'src/res'
 ----
 
 == AUTHORS
-*convert-resources* was written by Vulcalien <\vulcalien@vulcalien.net>.
+*res2gba* was written by Vulcalien <\vulcalien@vulcalien.net>.
