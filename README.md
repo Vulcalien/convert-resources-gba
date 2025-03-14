@@ -78,6 +78,7 @@ The program can convert these types of resource: *tilesets*, *images*,
 divided in 8x8 blocks. This type of resource matches the GBA's way of
 dealing with tiled backgrounds or sprites. For example, this is a
 tileset (black lines drawn on top to highlight tiles):
+
 ![Tileset example](examples/tileset.png)
 
 *Images* are generic images, treated as simple arrays of pixels.
@@ -86,6 +87,7 @@ tileset (black lines drawn on top to highlight tiles):
 indexed colors (except in some display modes), *res2gba* needs palettes
 to properly map pixels of tilesets and images. The following palette
 works well for the tileset shown above:
+
 ![Palette example](examples/palette.png)
 
 *Files* are generic files, prepared for embedding without changing their
