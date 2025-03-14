@@ -88,14 +88,14 @@ FILE_TYPES = {
         'args_function': tileset_args
     },
 
-    'palettes': {
-        'script': '%s/converters/image-to-array',
-        'args_function': (lambda element : '-b 16')
-    },
-
     'images': {
         'script': '%s/converters/image-to-array',
         'args_function': image_args
+    },
+
+    'palettes': {
+        'script': '%s/converters/image-to-array',
+        'args_function': (lambda element : '-b 16')
     },
 
     'files': {
