@@ -2,7 +2,7 @@
 :doctype: manpage
 :manmanual: Manual for res2gba
 :mansource: res2gba
-:revdate: 2025-03-12
+:revdate: 2025-03-14
 :docdate: {revdate}
 
 == NAME
@@ -27,14 +27,14 @@ Images composed of tiles of a given size, converted into arrays of type
 *u8* (unsigned 8-bit). Each tile is made up of 8x8 blocks. To match the
 behavior of GBA hardware, the scanning order is: tiles, blocks, pixels.
 
-*palettes*::
-Images acting as lists of 16-bit colors, converted into arrays of type
-*u16* (unsigned 16-bit). Pixels are scanned line by line.
-
 *images*::
 Generic images, converted into arrays of type *u8* (unsigned 8-bit) or
 *u16* (unsigned 16-bit), depending on the bits-per-pixel property.
 Pixels are scanned line by line.
+
+*palettes*::
+Images acting as lists of 16-bit colors, converted into arrays of type
+*u16* (unsigned 16-bit). Pixels are scanned line by line.
 
 *files*::
 Generic files translated directly into arrays of type *u8* (unsigned
